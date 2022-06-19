@@ -11,12 +11,12 @@ namespace Emulator.App
             {
                 Console.WriteLine("Enter a command: ");
                 operation = Console.ReadLine();
-                var values = CLI.ParseCliCommand(operation);
+                var values = StringOperations.ParseCliCommand(operation);
                 while (values.Item1 is null && values.Item2 is null)
                 {
                     CLI.PrintToConsole("There is no commanda try again!",ConsoleColor.Red);
                     operation = Console.ReadLine();
-                    values = CLI.ParseCliCommand(operation);
+                    values = StringOperations.ParseCliCommand(operation);
                 }
                 switch (values.Item1)
                 {
@@ -47,13 +47,16 @@ namespace Emulator.App
                         {
                             if (values.Item2 is null)
                             {
-                                CLI.PrintToConsole("Command is ntt defined try another command",ConsoleColor.Red);
+                                CLI.PrintToConsole("Command is not defined try another command",ConsoleColor.Red);
                             }
                             else
                             {
-                                File.ChangeCurrentDirtectory(values.Item2);
-                                string current_path = File.GetCurrentDirectory();
-                                CLI.PrintToConsole(current_path,ConsoleColor.Red);    
+                                if (File.ChangeCurrentDirtectory(values.Item2))
+                                {
+                                    string current_path = File.GetCurrentDirectory();
+                                    CLI.PrintToConsole(current_path,ConsoleColor.Red);    
+                                }
+                              
                             }
                         }
                         catch (Exception e)
@@ -73,7 +76,33 @@ namespace Emulator.App
                         {
                            File.CreateTextFile(values.Item2);    
                         }
-                    }break; 
+                    }break;
+                    case "cpto":
+                    case "CPTO":
+                    {
+                        try
+                        {
+                            File.MoveTo(values.Item2, overwrite: true);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                            throw;
+                        }
+                    }break;
+                    case "cp":
+                    case "CP":
+                    {
+                        try
+                        {
+                            File.MoveTo(values.Item2, overwrite: false);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                            throw;
+                        }
+                    }break;    
                     default:
                     {
                        CLI.PrintToConsole("There not command like this try another one!",ConsoleColor.Red); 
