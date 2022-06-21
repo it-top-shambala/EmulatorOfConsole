@@ -2,7 +2,7 @@ using System.Security.Cryptography;
 
 namespace Emulator.App;
 
-public static class StringOperations
+public static class CommandStringOperations
 {
     public static (string,string) ParseMoveToCommand(string command)
     {
